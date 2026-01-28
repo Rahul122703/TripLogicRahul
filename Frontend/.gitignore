@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 note.txt
-./note.txt
+../note.txt

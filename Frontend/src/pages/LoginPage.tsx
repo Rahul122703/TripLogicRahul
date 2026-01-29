@@ -1,58 +1,62 @@
-// src/pages/Login.tsx
-import { useState  } from "react";
-import type { FormEvent ,ChangeEvent} from "react";
+import { useState } from "react"
 
 const LoginPage = () => {
-  const [email, setEmail] = useState<string>("");
-  const [sent, setSent] = useState<boolean>(false);
+  const [email, setEmail] = useState("")
+  const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
 
     try {
-      const res = await fetch("http://localhost:8000/auth/send-magic-link", {
+      const res = await fetch("http://localhost:8000/auth/magic-link", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ email }),
-      });
+      })
 
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(txt || "Failed to send link");
-      }
+      if (!res.ok) throw new Error("Failed")
 
-      setSent(true);
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Something went wrong";
-      alert("Error: " + message);
+      setSent(true)
+    } catch {
+      alert("Failed to send magic link")
+    } finally {
+      setLoading(false)
     }
-  };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+  }
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="h-screen grid place-items-center">
+      <div className="border p-6 w-[350px]">
+        {sent ? (
+          <p>Magic link sent to your email. Check inbox.</p>
+        ) : (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <h2 className="text-lg font-bold">Login</h2>
 
-      {!sent ? (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            value={email}
-            onChange={handleChange}
-            placeholder="you@yourcompany.com"
-            required
-          />
-          <button type="submit">Send magic link</button>
-        </form>
-      ) : (
-        <p>Link sent. Check your email.</p>
-      )}
+            <input
+              type="email"
+              placeholder="Enter email"
+              className="border p-2"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <button
+              disabled={loading}
+              className="border bg-black text-white p-2"
+            >
+              {loading ? "Sending..." : "Send Magic Link"}
+            </button>
+          </form>
+        )}
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

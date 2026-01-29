@@ -6,11 +6,9 @@ class Settings(BaseSettings):
     TRIPLOGIC_STYTCH_SECRET: str
     TRIPLOGIC_STYTCH_CLIENTID: str
     TRIPLOGIC_STYTCH_CLIENTSECRET: str
-
-    PRODUCTION: str | None = None
-    STAGING: str | None = None
-    PYCHARM_HOSTED: str | None = None
-
+    PRODUCTION: str = "0"
+    STAGING: str = "0"
+    PYCHARM_HOSTED: str = "0"
     class Config:
         env_file = ".env"
 

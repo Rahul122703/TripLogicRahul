@@ -1,10 +1,12 @@
 from fastapi import FastAPI
+from app.routers import suppliers, services
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import auth
 
-app = FastAPI(title="FastAPI + Stytch Auth")
+app = FastAPI()
 
-# Frontend origins (Vite)
+app.include_router(suppliers.router)
+app.include_router(services.router)
+
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
@@ -18,8 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-
 @app.get("/")
 def root():
-    return {"status": "ok"}
+    return {"status": "Backend running"}

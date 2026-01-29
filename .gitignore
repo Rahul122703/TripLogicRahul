@@ -24,4 +24,6 @@ dist-ssr
 *.sw?
 note.txt
 venv/
-
+.env
+backend/.env
+frontend/.env
